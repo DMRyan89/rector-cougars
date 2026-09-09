@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1B3FA0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cougars">
+<title>Rector Cougars · Bell Schedule</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#1B3FA0; --navy:#0F2460; --sky:#DCE5FA; --paper:#F7F8FC; --ink:#141A2E;
+    --mute:#6B7390; --line:#DDE1EC; --red:#C8102E; --gold:#E7B10A; --green:#1E8E4B;
+    --sans:"Barlow",system-ui,sans-serif; --cond:"Barlow Condensed",var(--sans);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;
+       padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  header{background:var(--blue);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 20px 14px;
+         display:flex;align-items:baseline;justify-content:space-between}
+  header .brand{display:flex;align-items:center;gap:10px}
+  header img{width:34px;height:34px}
+  header h1{font-family:var(--cond);font-weight:800;font-size:22px;letter-spacing:.01em}
+  header span{font-size:13px;opacity:.85}
+  main{max-width:520px;margin:0 auto;padding:0 16px}
+  .view{display:none}.view.on{display:block}
+
+  /* hero */
+  .hero{background:var(--navy);color:#fff;margin:0 -16px;padding:28px 24px 30px;
+        border-radius:0 0 28px 28px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;
+               background:var(--blue);opacity:.45}
+  .hero .label{font-size:15px;color:#BFD0FF;font-weight:500}
+  .hero .big{font-family:var(--cond);font-weight:800;font-size:64px;line-height:1;margin:6px 0 2px;letter-spacing:-.01em}
+  .hero .sub{font-size:16px;color:#BFD0FF}
+  .hero .sub b{color:#fff;font-weight:600}
+  .bar{height:6px;background:rgba(255,255,255,.18);border-radius:3px;margin-top:18px;overflow:hidden;position:relative;z-index:1}
+  .bar i{display:block;height:100%;background:var(--gold);border-radius:3px;transition:width 1s linear}
+
+  /* schedule list */
+  .sched{margin-top:18px}
+  .row{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:12px;padding:12px 10px;
+       border-radius:12px;border-bottom:1px solid var(--line)}
+  .row.now{background:var(--sky);border-bottom-color:transparent;font-weight:600}
+  .row.done{color:var(--mute)}
+  .row .num{font-family:var(--cond);font-weight:700;font-size:22px;color:var(--blue)}
+  .row.done .num{color:var(--mute)}
+  .row .time{font-variant-numeric:tabular-nums;font-size:14px;color:var(--mute)}
+  .row.now .time{color:var(--ink)}
+  .row.note{grid-template-columns:1fr;text-align:center;font-size:13px;color:var(--mute);background:#FFF7DB;
+            border-radius:10px;border-bottom:0;padding:8px}
+
+  /* calendar */
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+  .stat .n{font-family:var(--cond);font-weight:800;font-size:44px;line-height:1;color:var(--blue)}
+  .stat .l{font-size:14px;color:var(--mute);margin-top:4px}
+  h2{font-family:var(--cond);font-weight:700;font-size:20px;margin:26px 0 8px;color:var(--navy)}
+  .ev{display:grid;grid-template-columns:56px 1fr;gap:12px;padding:12px 6px;border-bottom:1px solid var(--line);align-items:center}
+  .ev .d{font-family:var(--cond);text-align:center;line-height:1.05}
+  .ev .d b{display:block;font-size:24px;font-weight:800}
+  .ev .d small{font-size:12px;font-weight:600;color:var(--mute);letter-spacing:.04em}
+  .ev .t{font-weight:500}
+  .ev .t small{display:block;font-size:13px;color:var(--mute);font-weight:400;margin-top:2px}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle}
+  .past{opacity:.45}
+  .toggle{margin:14px 0 4px;display:flex;justify-content:flex-end}
+  .toggle button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;color:var(--mute)}
+
+  /* lunch */
+  .lunch{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .lunch h3{font-family:var(--cond);font-weight:700;font-size:17px;color:var(--navy);margin-bottom:6px}
+  .lunch ul{list-style:none;font-size:14px;line-height:1.45}
+  .lunch li:first-child{font-weight:600}
+  .lunch .none{grid-column:1/-1;color:var(--mute);font-size:14px}
+  .mday{padding:12px 6px;border-bottom:1px solid var(--line)}
+  .mday .d{font-family:var(--cond);font-weight:700;font-size:18px;color:var(--blue);margin-bottom:4px}
+  .mday.today .d{color:var(--red)}
+  .mday .cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:14px;line-height:1.4}
+  .mday .cols b{display:block;font-size:12px;color:var(--mute);font-weight:600;margin-bottom:2px}
+
+  /* nav */
+  nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex;
+      padding-bottom:env(safe-area-inset-bottom)}
+  nav button{flex:1;background:none;border:0;padding:12px 0 10px;font:inherit;font-size:13px;color:var(--mute);cursor:pointer}
+  nav button.on{color:var(--blue);font-weight:600}
+  nav button:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+  nav button:first-child{}
+  nav svg{display:block;margin:0 auto 3px;width:22px;height:22px}
+  footer{text-align:center;font-size:12px;color:var(--mute);padding:26px 0 6px}
+</style>
+</head>
+<body>
+<header><div class="brand"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGYAAABkCAYAAAB0F0VpAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAh6SURBVHgB7Z17sFVTHMd/l9JT0ktFKdwUopoy1UyMokseXTIkTSN/UIYwjWLGP8rkMTTJyGNkihmpGDNpSkSaisFUopKUUtHtgW7pQWr5fq19TXO6d6+199n7rHvv2p+Z7+zq/M7pnP0966zXb60lklEtKVJA/OI49Cd0CNoP7YP2QrugHdB2aCu0k38uKioqFwf4aIwNvCdHoD+gH6GvoS+gldAOmHVMUiYzJhosPeugxdAMGLRFUiIzJj78SVwLzYWmwqT9kiCZMclwAJoKTYNBv0oCZMYkC015FJoFg/6RPKAxN+PaGGoCtYY6Qd2hC/i4ZESFP3GvQ+PyadFVeuNhFv+dBk2GSqBTJSMqbMUNhzk/SQxCSwQMqoPLe9BNUj1gE/Yb0S2jMuhv0Z+hJXQh1BU6S6oPW6H+qbTeYE4f6LhyzxqoL3RKyHttA5VCC6EDqnqwFrpYImKsQ/CiZ4r+lrYXd7CB0gXfvB+sn6BUD1xegnqLe76D+uD9H7R9wikWMRy+SKQJmAcbophCEL8Klyuht6G8WkgJwJ/YyVGeYDQGH/Co6Ha6SzZLDPDeWQeNgN4V94xEKb7cNtimxJAj4pZDEpNgXOtBaIO4pS70lG2wrTE1GpizG5cHoKPilqtQai6xCfTCmIBPoQ/ELWxsjbAJ9MYYlBr2yCeI+4bAUJSaFqYgn0oMzVmDy1JxSzvoMlOQV8YEvC/uud4U4KMxH4num7mklynAR2O2ivsOc0fUM43DArwzJugwrxO3nA61CQvwscQQ153NRlDzsABfjUkticISzm+1Cgvw1Zg94p6sjqmERDNaYlI/7EFfjXE9ZkZCkwZ9NaY6fO7QRA1fjTlN3MIZ2d/CAnw1prG4hSMPZWEBvhrTWtzClQTbwgJ8NeZsccuXGIH4KyzAV2M6iVsWmAK8MwaDh5x7v0jcwcVRxjkhH0tMe3GbI7cIP2M7TUE+GtNN3LXK2LGdYBPoozFMhnC1imE2Sss2m0CvjEH9cg4uA8UNnJwbbxvsW4l5WAyDhynBhMn7o6w288YYlBYu0xguhYdpU0/DlEhJIF4YA1M4Y8hKt5UUFo6JTYEmSUTqiB/cDt0mhYUl5RVofJz1mLW+xKC0DMPlBSksTIJnfTYm7iLZWltiYAiTHZ6D7pLCwgycIVHX8+RSq4xRelEv04KGQqNEr7wuFJz4ehOaCFPyzimo0cYE415citgR6gwNgvpDxqTtBGFd8g40CYYklq9m1QPGDZiHy43iDhUolyJx14vnbk2zoOkwZK0kTE0pMS4NqIDJE9yN6VtoJrQEhmyXlPCluRwX7mXG0vAVtBxaAe2BIalv85IZUzls7r4KTYM2F8KIXHydwTTRUHQ/ZCO0EnXsWKizCtn8IWkyY8JhvcYNj9gf4u5+c2BOCVRPUqa2GpPGTw9L0RBoPjQP5nSVFKlNxrA/MUf0bhjs33DuhZ3MVcFjScF6mXM6/Il7NtjSJXFqSj+Ge9nkDpvzS8XR4vOgTdBsaEWwOvl/gp+dMdATUANJHnYqb8H/u1EKDY1RbpkueYDnc8O866BdKh3K+PqSIL7sjKGghaLzyUZDP0uycI80NgzGSkL4ts6/HOIcSRfoDmiJxNunhpsefSh6I7sKmHnDOmewJICXzWWYcxjiwOPVohsLbA6vF735NbMkw8xiaSuFHpGT19nwfr4BcwqTG61qeB1j+RkbQPWUro/6QVOgRdAm6Ch0DFoAnRvEDw55vzOVHvmOTTYkE8BSdMJflwX6D9xkLmblvpu7T2j13Rnyckz64EbZ8yUmWc/fAu55BpXlNMXD+ka8r4/nU2oyY+JjGl3gUE7sdKnMmPg0MjzO5YSjJSaZMfFZbRHTCz9nfSUGmTHxeU0MC1wDSiUGmTExQUPgF9H7KZu4AaWmiUQkMyY/llvEMGe6g0QkMyY/bLL3eY8HSEQyY2Ki9DRzsWV4iUQkMyY+NOUey9iuUesZ743BDauj9CkbU6FxkO0xJ5yAY16Zzfb6zUTXNdZ4PVYGE7jVLkeWeepUxfDJKPw7T+3jEYtz0fraV8XT2SJbBF0BNRW9bW9V95Or2HoGr2mFt8bg5nNOhga0zXmIedAjoWugFoh7Pji8IReawft3vphHAUgPiYCXP2W42bypHP1tW0UI52OYH8DcshKVk0+Gv/PbT/POEJ1v8LuYjwuLZIyvJYY3NewUpCaBeL4YlwjyFCeeQ8NFrhycnCi6xLCTyYSWQ8FjYQtvu+A16qP0WZ0sUlOMSezwOqWXlD9kGc4MHNYx3LTh7koeP3GzINNoM0vgpaLzoI3UlJ+yJNOOHpNoW5Y0tYyzSQXrLpb4tJy8LvQy/nifuKObbaBPlT+nhoeJW3raBvpkDIfo14tbipVeJ2rEp4N9uKOezWhwmrB5bTUC4Fs/5nNxTz+bIN+MYUrSMXFLqc3PmW8psntx+V7cwhyAdqYgH4dkVohb2C8yHipua0xDcUuSHUzXDQAywpQMaDQmeAGb0dM0aSbJwSGRcnELT/UbGRZgU2JYWtqKW4pVciuGeW6z6zPKmAz4JD5Th6oCbD5sH3FvTMvgfeRNcPbyM+L+qBJ+plkwJ/qu6XhSM+gTVT1YrGLkZ1XxubjU4l7ooHLPaqWXfZhHBJQe8BsALVXVi8+g3spyWMPicw6E5kPLoLeUXgvjgnLoRahlxXvjN4ejraxH2IzjSihOlXLeIMkKN2l42jhXMm8J/lweaEbcHfWI0mdTcvXzIHED3zs7wR/TmILvk5ISPI+lo+0MYVXgdvALyVwA67mTNMjyynKAsZy/d97XyYzJQem8smvFMZkxJ8MlfM6PY8yMySHYaLQ/dCs0Q3R60mEpMFnlb0DpXc65hJyJgMXBlaPDbNq2CK7NJWH+BQWbSu7mL0anAAAAAElFTkSuQmCC" alt=""><h1>Rector Cougars</h1></div><span id="hdate"></span></header>
+<main>
+
+<section class="view on" id="today">
+  <div class="hero">
+    <div class="label" id="h-label">Loading</div>
+    <div class="big" id="h-big">&nbsp;</div>
+    <div class="sub" id="h-sub"></div>
+    <div class="bar" id="h-bar"><i></i></div>
+  </div>
+  <div class="lunch" id="lunch-today"></div>
+  <div class="sched" id="sched"></div>
+  <footer>School day 7:58–3:10 · Times update every second</footer>
+</section>
+
+<section class="view" id="cal">
+  <div class="stats">
+    <div class="stat"><div class="n" id="s-break">–</div><div class="l" id="s-break-l">days until next break</div></div>
+    <div class="stat"><div class="n" id="s-left">–</div><div class="l">school days left this year</div></div>
+  </div>
+  <h2>Grading periods</h2>
+  <div id="quarters"></div>
+  <h2>What's coming up</h2>
+  <div id="events"></div>
+  <div class="toggle"><button id="showpast">Show past events</button></div>
+  <footer>2026–2027 Rector School District calendar</footer>
+</section>
+
+<section class="view" id="lunch">
+  <h2 id="lunch-title">Lunch menu</h2>
+  <div id="menu-list"></div>
+  <footer>Menu is subject to change · Pay online at MySchoolBucks.com</footer>
+</section>
+
+</main>
+<nav>
+  <button class="on" data-v="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Today</button>
+  <button data-v="lunch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M17 3c-2 0-3 3-3 7h3v11"/></svg>Lunch</button>
+  <button data-v="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendar</button>
+</nav>
+
+<script>
+/* ---------- DATA: edit here when things change ---------- */
+const PERIODS = [
+  {n:"1st", s:"7:58",  e:"8:40"},
+  {n:"2nd", s:"8:45",  e:"9:28"},
+  {n:"A",   s:"9:32",  e:"10:07", name:"Activity period"},
+  {n:"3rd", s:"10:11", e:"10:54"},
+  {n:"4th", s:"10:58", e:"11:41"},
+  {n:"5th", s:"11:45", e:"12:28"},
+  {n:"L",   s:"12:28", e:"12:52", name:"Lunch"},
+  {n:"6th", s:"12:56", e:"13:38"},
+  {n:"7th", s:"13:42", e:"14:24"},
+  {n:"8th", s:"14:28", e:"15:10"},
+];
+const FIRST_DAY = "2026-08-19", LAST_DAY = "2027-05-21";
+// Days with no school for students. Ranges are inclusive.
+const NO_SCHOOL = [
+  {s:"2026-09-07", e:"2026-09-08", t:"Labor Day", k:"hol"},
+  {s:"2026-10-12", t:"Teacher in-service", k:"pd"},
+  {s:"2026-11-23", e:"2026-11-27", t:"Thanksgiving Break", k:"hol"},
+  {s:"2026-12-21", e:"2027-01-01", t:"Christmas Break", k:"hol"},
+  {s:"2027-01-18", t:"Teacher in-service", k:"pd"},
+  {s:"2027-02-12", t:"Teacher in-service", k:"pd"},
+  {s:"2027-02-15", t:"Teacher in-service", k:"pd"},
+  {s:"2027-03-22", e:"2027-03-26", t:"Spring Break", k:"hol"},
+  {s:"2027-04-23", t:"Teacher in-service", k:"pd"},
+];
+const QUARTERS = [
+  {n:"1st quarter", s:"2026-08-19", e:"2026-10-16"},
+  {n:"2nd quarter", s:"2026-10-19", e:"2026-12-18"},
+  {n:"3rd quarter", s:"2027-01-04", e:"2027-03-05"},
+  {n:"4th quarter", s:"2027-03-08", e:"2027-05-21"},
+];
+const EVENTS = [
+  {d:"2026-08-04", t:"RHS registration", sub:"Aug 4–6", k:"info"},
+  {d:"2026-08-17", t:"Open house", sub:"5:00–7:00 pm", k:"info"},
+  {d:"2026-08-19", t:"First day of school", sub:"1st quarter begins", k:"q"},
+  {d:"2026-10-01", t:"Parent/teacher conferences", sub:"3:30–6:30 pm", k:"pt"},
+  {d:"2026-10-16", t:"End of 1st quarter", k:"end"},
+  {d:"2026-10-19", t:"2nd quarter begins", k:"q"},
+  {d:"2026-12-18", t:"End of 2nd quarter", sub:"Last day before Christmas Break", k:"end"},
+  {d:"2027-01-04", t:"3rd quarter begins", sub:"Back from Christmas Break", k:"q"},
+  {d:"2027-02-11", t:"Parent/teacher conferences", sub:"3:30–6:30 pm", k:"pt"},
+  {d:"2027-03-05", t:"End of 3rd quarter", k:"end"},
+  {d:"2027-03-08", t:"4th quarter begins", k:"q"},
+  {d:"2027-05-16", t:"Graduation", k:"grad"},
+  {d:"2027-05-21", t:"Last day of school", sub:"End of 4th quarter", k:"end"},
+  {d:"2027-05-24", t:"Snow make-up days (only if needed)", sub:"May 24–28", k:"snow"},
+  {d:"2027-05-31", t:"Memorial Day", k:"hol"},
+];
+const COLORS = {hol:"#2E6FE8", pd:"#B8862B", q:"#E7B10A", end:"#C8102E", pt:"#7B3FB8", grad:"#1E8E4B", snow:"#8C96B0", info:"#6B7390"};
+const CHEESEBURGER=["Cheeseburger","French Fries","Sandwich Salad Cup","Diced Peaches"];
+const GG_POTATO=["Salad or Baked Potato","Ham & Cheese Cup","Veggies of the Day","Butter Cup/Sour Cream/Roll","Fruit of the Day"];
+const GG_CHICKEN=["Salad or Chicken Filet Sandwich","Veggies of the Day","Fruit of the Day"];
+const gg=(...a)=>[...a,"Veggies of the Day","Fruit of the Day"];
+// Lunch menus by date. main = Main Lunch Menu, grab = Grab & Go.
+const MENUS = {
+  "2026-09-01":{main:["Salisbury Steak/Gravy","Mash Potatoes","Seasoned Green Beans","Roll","Fruit Cocktail"], grab:GG_POTATO},
+  "2026-09-02":{main:["Mozzarella Cheese Bites","Marinara Sauce Cups","Salad/Ranch","Seasoned Corn","Sidekick"], grab:gg("Salad or Crispitos")},
+  "2026-09-03":{main:["Mini Corn Dog","Cole Slaw","Baked Beans","Tropical Fruit Mix"], grab:GG_POTATO},
+  "2026-09-04":{main:CHEESEBURGER, grab:GG_CHICKEN},
+  "2026-09-09":{main:["Tacos w/Beef","Chicken Fajita (HS)","Tortilla Shell","Lettuce, Tomatoes, Cheese","Pinto Beans/Pineapple Tidbits"], grab:gg("Salad or General Tso Chicken/Roll","Egg Roll/Rice")},
+  "2026-09-10":{main:["Fish Sticks","Macaroni & Cheese","Peas & Carrots","Roll","Diced Pears"], grab:GG_POTATO},
+  "2026-09-11":{main:CHEESEBURGER, grab:GG_CHICKEN},
+  "2026-09-14":{main:["Nachos w/Beef & Cheese","Tortilla Chips","Seasoned Pinto Beans","Salad/Ranch","Pineapple Tidbits"], grab:gg("Salad or BBQ Nachos")},
+  "2026-09-15":{main:["Chicken Chunks","Mash Potatoes/Gravy","Seasoned Green Beans","Roll","Fruit Cocktail"], grab:GG_POTATO},
+  "2026-09-16":{main:["Toasted Ham & Cheese Sandwich","Chips","Salad Sandwich Cup","Great Northern Beans","Sidekick"], grab:gg("Salad or Hoagie Sandwich","Chips")},
+  "2026-09-17":{main:["Burrito w/Chili & Cheese","Goldfish Crackers","Seasoned Corn","Salad/Ranch","Apple Slices"], grab:GG_POTATO},
+  "2026-09-18":{main:CHEESEBURGER, grab:GG_CHICKEN},
+  "2026-09-21":{main:["Spaghetti w/Beef","Bosco Stick","Seasoned Peas","Salad/Ranch","Apple Slices"], grab:gg("Salad or Hot & Spicy Chicken Sandwich")},
+  "2026-09-22":{main:["Chicken Strips","Mash Potatoes/Gravy","Seasoned Green Beans","Roll","Fruit Cocktail"], grab:GG_POTATO},
+  "2026-09-23":{main:["Hot Dog w/Chili & Cheese","Baked Beans","Steamed Carrots","Froot Jooce"], grab:gg("Salad or Chicken Quesadilla")},
+  "2026-09-24":{main:["Mozzarella Cheese Bites","Marinara Sauce Cups","Salad/Ranch","Seasoned Corn","Froot Jooce"], grab:GG_POTATO},
+  "2026-09-25":{main:CHEESEBURGER, grab:GG_CHICKEN},
+  "2026-09-28":{main:["Pepperoni Pizza","Stuffed Crust Pizza","Salad/Ranch","Seasoned Corn","Fruit Slushies (Sidekicks)"], grab:gg("Salad or Pizza Stick w/Marinara Sauce")},
+  "2026-09-29":{main:["Pop Corn Smackers","Mash Potatoes/Gravy","Seasoned Green Beans","Roll","Fruit Cocktail"], grab:GG_POTATO},
+  "2026-09-30":{main:["Chicken & Noodles","Roll","Steamed Broccoli","Steamed Carrots","Apple Slices"], grab:gg("Salad or Crispito")},
+};
+/* -------------------------------------------------------- */
+
+const $ = s => document.querySelector(s);
+const pad = n => String(n).padStart(2,"0");
+const key = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y,m-1,d); };
+const mins = t => { const [h,m] = t.split(":").map(Number); return h*60+m; };
+const fmt12 = t => { let [h,m] = t.split(":").map(Number); const ap = h>=12?"pm":"am"; h = h%12||12; return `${h}:${pad(m)}`; };
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DOW = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const dayDiff = (a,b) => Math.round((parse(key(b))-parse(key(a)))/864e5);
+
+function noSchool(d){
+  const k = key(d);
+  if (d.getDay()===0||d.getDay()===6) return "Weekend";
+  if (k<FIRST_DAY) return "Summer break";
+  if (k>LAST_DAY) return "Summer break";
+  for (const x of NO_SCHOOL){ if (k>=x.s && k<=(x.e||x.s)) return x.t; }
+  return null;
+}
+function nextSchoolDay(d){ const n = new Date(d); n.setHours(12); do{ n.setDate(n.getDate()+1);}while(noSchool(n)); return n; }
+function schoolDaysLeft(d){ let c=0; const n=new Date(d); n.setHours(12); const end=parse(LAST_DAY); while(n<=end){ if(!noSchool(n)) c++; n.setDate(n.getDate()+1);} return c; }
+
+function renderSchedule(nowMin, isSchoolDay){
+  $("#sched").innerHTML = PERIODS.map(p=>{
+    const s=mins(p.s), e=mins(p.e);
+    let cls = "row";
+    if (isSchoolDay){ if (nowMin>=s && nowMin<e) cls+=" now"; else if (nowMin>=e) cls+=" done"; }
+    const label = p.name || `Period ${p.n}`;
+    return `<div class="${cls}"><div class="num">${p.n}</div><div>${label}</div><div class="time">${fmt12(p.s)}–${fmt12(p.e)}</div></div>`;
+  }).join("");
+}
+
+function tick(){
+  const now = new Date();
+  $("#hdate").textContent = `${DOW[now.getDay()].slice(0,3)}, ${MON[now.getMonth()]} ${now.getDate()}`;
+  const reason = noSchool(now);
+  const nowMin = now.getHours()*60 + now.getMinutes() + now.getSeconds()/60;
+  const L=$("#h-label"), B=$("#h-big"), S=$("#h-sub"), bar=$("#h-bar i");
+  const remain = m => { const t=Math.max(0,m-nowMin); const mm=Math.floor(t), ss=Math.floor((t-mm)*60); return `${mm}:${pad(ss)}`; };
+
+  if (reason){
+    const nx = nextSchoolDay(now);
+    L.textContent = "No school today";
+    B.textContent = reason;
+    S.innerHTML = `Back <b>${DOW[nx.getDay()]}, ${MON[nx.getMonth()]} ${nx.getDate()}</b>`;
+    bar.style.width="0";
+    renderSchedule(nowMin,false); return;
+  }
+  const first = mins(PERIODS[0].s), last = mins(PERIODS[PERIODS.length-1].e);
+  if (nowMin < first){
+    L.textContent = "Good morning"; B.textContent = "School starts";
+    S.innerHTML = `in <b>${remain(first)}</b> · 1st period at ${fmt12(PERIODS[0].s)}`; bar.style.width="0";
+  } else if (nowMin >= last){
+    L.textContent = "That's a wrap"; B.textContent = "School's out";
+    const nx = nextSchoolDay(now);
+    S.innerHTML = `Next school day: <b>${DOW[nx.getDay()]}</b>`; bar.style.width="100%";
+  } else {
+    let cur = PERIODS.find(p=>nowMin>=mins(p.s)&&nowMin<mins(p.e));
+    if (cur){
+      const s=mins(cur.s), e=mins(cur.e);
+      L.textContent = `Right now · ${fmt12(cur.s)}–${fmt12(cur.e)}`;
+      B.textContent = cur.name || `${cur.n} period`;
+      S.innerHTML = `Bell rings in <b>${remain(e)}</b>`;
+      bar.style.width = ((nowMin-s)/(e-s)*100).toFixed(1)+"%";
+    } else {
+      const nx = PERIODS.find(p=>mins(p.s)>nowMin);
+      L.textContent = "Passing period"; B.textContent = "Get moving";
+      S.innerHTML = `${nx.name||nx.n+" period"} starts in <b>${remain(mins(nx.s))}</b>`; bar.style.width="100%";
+    }
+  }
+  renderSchedule(nowMin,true);
+}
+
+function renderLunch(){
+  const now=new Date(), k=key(now);
+  const li=a=>`<ul>${a.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+  const t=MENUS[k];
+  $("#lunch-today").innerHTML = t
+    ? `<div><h3>Main lunch</h3>${li(t.main)}</div><div><h3>Grab &amp; Go</h3>${li(t.grab)}</div>`
+    : `<div class="none">${noSchool(now)?"No lunch today — no school.":"No menu posted for today yet."}</div>`;
+  const days=Object.keys(MENUS).sort(); if(!days.length) return;
+  const m=parse(days[0]); $("#lunch-title").textContent=`${["January","February","March","April","May","June","July","August","September","October","November","December"][m.getMonth()]} lunch menu`;
+  $("#menu-list").innerHTML = days.map(d=>{const x=parse(d), v=MENUS[d];
+    return `<div class="mday ${d===k?'today':''} ${d<k?'past':''}"><div class="d">${DOW[x.getDay()]}, ${MON[x.getMonth()]} ${x.getDate()}</div><div class="cols"><div><b>Main</b>${v.main.join("<br>")}</div><div><b>Grab &amp; Go</b>${v.grab.join("<br>")}</div></div></div>`;}).join("");
+}
+
+function renderCalendar(){
+  const now = new Date(); const k = key(now);
+  // next break = next multi-day holiday or summer
+  const breaks = NO_SCHOOL.filter(x=>x.k==="hol"&&x.e).map(x=>({s:x.s,t:x.t}));
+  breaks.push({s:"2027-05-22", t:"Summer"});
+  const nb = breaks.find(b=>b.s>k);
+  if (nb){ $("#s-break").textContent = dayDiff(now, parse(nb.s)); $("#s-break-l").textContent = `days until ${nb.t}`; }
+  $("#s-left").textContent = k>LAST_DAY ? 0 : schoolDaysLeft(now);
+
+  $("#quarters").innerHTML = QUARTERS.map(q=>{
+    const a=parse(q.s), b=parse(q.e); const on = k>=q.s&&k<=q.e;
+    return `<div class="ev ${k>q.e?'past':''}"><div class="d"><b>${on?'Now':'Q'+q.n[0]}</b></div><div class="t">${q.n}<small>${MON[a.getMonth()]} ${a.getDate()} – ${MON[b.getMonth()]} ${b.getDate()}</small></div></div>`;
+  }).join("");
+
+  const all = [...EVENTS, ...NO_SCHOOL.map(x=>({d:x.s, t:x.t, k:x.k, sub:x.e?`No school ${MON[parse(x.s).getMonth()]} ${parse(x.s).getDate()}–${parse(x.e).getDate()}`:"No school"}))]
+    .sort((a,b)=>a.d.localeCompare(b.d));
+  let showPast=false;
+  const draw = () => {
+    $("#events").innerHTML = all.filter(e=>showPast||e.d>=k).map(e=>{
+      const d=parse(e.d);
+      return `<div class="ev ${e.d<k?'past':''}"><div class="d"><b>${d.getDate()}</b><small>${MON[d.getMonth()].toUpperCase()}</small></div><div class="t"><span class="dot" style="background:${COLORS[e.k]}"></span>${e.t}${e.sub?`<small>${e.sub}</small>`:""}</div></div>`;
+    }).join("") || `<div class="ev"><div></div><div class="t">Nothing left on the calendar — see you next year.</div></div>`;
+    $("#showpast").textContent = showPast?"Hide past events":"Show past events";
+  };
+  $("#showpast").onclick = ()=>{showPast=!showPast; draw();};
+  draw();
+}
+
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===b.dataset.v));
+  window.scrollTo(0,0);
+  if(b.dataset.v==="lunch"){const t=document.querySelector(".mday.today")||document.querySelector(".mday:not(.past)"); if(t) t.scrollIntoView({block:"start"});}
+});
+
+tick(); setInterval(tick,1000); renderCalendar(); renderLunch();
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+</script>
+</body>
+</html>
