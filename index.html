@@ -70,6 +70,9 @@
   .ev .t small{display:block;font-size:13px;color:var(--mute);font-weight:400;margin-top:2px}
   .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle}
   .past{opacity:.45}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;-webkit-overflow-scrolling:touch}
+  .chips button{flex:none;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;color:var(--mute)}
+  .chips button.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
   .toggle{margin:14px 0 4px;display:flex;justify-content:flex-end}
   .toggle button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;color:var(--mute)}
 
@@ -120,6 +123,7 @@
   <h2>Grading periods</h2>
   <div id="quarters"></div>
   <h2>What's coming up</h2>
+  <div class="chips" id="chips"><button class="on" data-f="all">All</button><button data-f="school">School</button><button data-f="sport">Sports</button><button data-f="career">College &amp; career</button></div>
   <div id="events"></div>
   <div class="toggle"><button id="showpast">Show past events</button></div>
   <footer>2026–2027 Rector School District calendar</footer>
@@ -187,8 +191,64 @@ const EVENTS = [
   {d:"2027-05-21", t:"Last day of school", sub:"End of 4th quarter", k:"end"},
   {d:"2027-05-24", t:"Snow make-up days (only if needed)", sub:"May 24–28", k:"snow"},
   {d:"2027-05-31", t:"Memorial Day", k:"hol"},
+  // ---- Football 2026 (Jr High 5:00 · Sr High 7:00) ----
+  {d:"2026-08-28", t:"Football vs Cave City", sub:"Home · JH 5:00 · SH 7:00", k:"sport"},
+  {d:"2026-09-18", t:"Football at Aspire", sub:"Away · JH 5:00 · SH 7:00", k:"sport"},
+  {d:"2026-09-25", t:"Homecoming: Football vs Corning", sub:"Home · Kickoff 5:00 · Evening ceremony after the JH game", k:"sport"},
+  {d:"2026-10-02", t:"Football at Cedar Ridge", sub:"Away · JH 5:00 · SH 7:00", k:"sport"},
+  {d:"2026-10-09", t:"Football at Brinkley", sub:"Away · JH 5:00 · SH 7:00", k:"sport"},
+  {d:"2026-10-16", t:"Senior Night: Football vs Midland", sub:"Home · JH 5:00 · SH 7:00", k:"sport"},
+  {d:"2026-10-30", t:"Football vs Augusta", sub:"Home · JH 5:00 · SH 7:00", k:"sport"},
+  {d:"2026-11-06", t:"Football at Marvell-Elaine", sub:"Away · JH 5:00 · SH 7:00", k:"sport"},
+  // ---- Cougar Carnival spirit week + homecoming ----
+  {d:"2026-09-21", t:"Spirit Week: Mime Monday", sub:"Pair up with a friend and dress exactly alike", k:"spirit"},
+  {d:"2026-09-22", t:"Spirit Week: Clownin' Around", sub:"Wear your wackiest outfit", k:"spirit"},
+  {d:"2026-09-23", t:"Spirit Week: Wild Wednesday", sub:"Wear animal print", k:"spirit"},
+  {d:"2026-09-24", t:"Spirit Week: Carnival After Dark", sub:"Neon, glitter, sparkles, or something bright", k:"spirit"},
+  {d:"2026-09-25", t:"Cougar Carnival Homecoming Day", sub:"Wear blue, black & white · 12:45 Parade · 1:15 Day ceremony · 1:45 Pep rally", k:"spirit"},
+  // ---- College & career ----
+  {d:"2026-09-30", t:"Army / National Guard activity", sub:"Juniors & seniors", k:"career"},
+  {d:"2026-10-01", t:"BRTC Pocahontas Preview Day", k:"career"},
+  {d:"2026-10-15", t:"College / Career Fair", k:"career"},
+  {d:"2026-10-16", t:"UCA guest speaker", k:"career"},
+  {d:"2026-10-20", t:"US Navy guest speaker", k:"career"},
+  {d:"2026-10-27", t:"WorkKeys assessment", sub:"Junior & senior classes · all morning", k:"career"},
+  {d:"2026-10-28", t:"Williams Baptist Preview Day", k:"career"},
+  {d:"2026-10-29", t:"WorkKeys assessment", sub:"Senior class", k:"career"},
+  {d:"2026-11-03", t:"WorkKeys assessment", k:"career"},
+  {d:"2026-11-04", t:"WorkKeys make-ups", k:"career"},
+  {d:"2026-11-10", t:"Find Your Future program", k:"career"},
+  // ---- Basketball 2026-27 (* = conference) ----
+  {d:"2026-11-05", t:"Basketball: Blue/White Game", sub:"Home · JG, JB, SG, SB · TBA", k:"sport"},
+  {d:"2026-11-12", t:"Basketball at Armorel", sub:"Away · JB, SB · 6:00", k:"sport"},
+  {d:"2026-11-19", t:"Basketball vs Trumann", sub:"Home · JG, JB, SG, SB · 4:00", k:"sport"},
+  {d:"2026-11-23", t:"Basketball vs Gosnell", sub:"Home · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2026-11-30", t:"Basketball at Gosnell", sub:"Away · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2026-12-01", t:"Basketball vs Piggott *", sub:"Home · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2026-12-08", t:"Basketball vs Corning *", sub:"At Williams Baptist · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2026-12-11", t:"Basketball at EPC *", sub:"Away · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2026-12-15", t:"Basketball at Buffalo Island *", sub:"Away · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2026-12-18", t:"Basketball at Riverside *", sub:"Away · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2026-12-21", t:"Basketball at Ridgefield", sub:"Away · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2026-12-29", t:"Basketball: Holiday Tournament", sub:"Rosebud · SB · Dec 29–31", k:"sport"},
+  {d:"2027-01-02", t:"Basketball: Kell Classic", sub:"Swifton · SB · Jan 2–9", k:"sport"},
+  {d:"2027-01-08", t:"Basketball at Marmaduke *", sub:"Away · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2027-01-12", t:"Basketball vs Maynard *", sub:"Home · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2027-01-15", t:"Basketball at Piggott *", sub:"Away · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2027-01-19", t:"Basketball vs Corning *", sub:"Home · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2027-01-22", t:"Basketball vs EPC *", sub:"Home · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2027-01-26", t:"Basketball vs BIC *", sub:"Home · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2027-01-29", t:"Basketball at Riverside *", sub:"Away · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2027-02-02", t:"Basketball vs Marmaduke *", sub:"Home · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2027-02-05", t:"Basketball at Maynard *", sub:"Away · 7th, JB, SB · 5:00", k:"sport"},
+  {d:"2027-02-08", t:"Basketball: Jr District Tournament", sub:"TBA · JG, JB · Feb 8–13", k:"sport"},
+  {d:"2027-02-09", t:"Basketball at Bay", sub:"Away · SG, SB · 6:00", k:"sport"},
+  {d:"2027-02-12", t:"Basketball vs Mammoth Spring", sub:"Home · SG, SB · 6:00", k:"sport"},
+  {d:"2027-02-15", t:"Basketball: Sr District Tournament", sub:"TBA · SG, SB · Feb 15–20", k:"sport"},
+  {d:"2027-02-24", t:"Basketball: Regional Tournament", sub:"TBA · SG, SB · Feb 24–27", k:"sport"},
+  {d:"2027-03-02", t:"Basketball: State Tournament", sub:"TBA · SG, SB · Mar 2–6", k:"sport"},
 ];
-const COLORS = {hol:"#2E6FE8", pd:"#B8862B", q:"#E7B10A", end:"#C8102E", pt:"#7B3FB8", grad:"#1E8E4B", snow:"#8C96B0", info:"#6B7390"};
+const COLORS = {hol:"#2E6FE8", pd:"#B8862B", q:"#E7B10A", end:"#C8102E", pt:"#7B3FB8", grad:"#1E8E4B", snow:"#8C96B0", info:"#6B7390", sport:"#0E8A7B", spirit:"#E76F1F", career:"#A0522D"};
 const CHEESEBURGER=["Cheeseburger","French Fries","Sandwich Salad Cup","Diced Peaches"];
 const GG_POTATO=["Salad or Baked Potato","Ham & Cheese Cup","Veggies of the Day","Butter Cup/Sour Cream/Roll","Fruit of the Day"];
 const GG_CHICKEN=["Salad or Chicken Filet Sandwich","Veggies of the Day","Fruit of the Day"];
@@ -319,9 +379,11 @@ function renderCalendar(){
 
   const all = [...EVENTS, ...NO_SCHOOL.map(x=>({d:x.s, t:x.t, k:x.k, sub:x.e?`No school ${MON[parse(x.s).getMonth()]} ${parse(x.s).getDate()}–${parse(x.e).getDate()}`:"No school"}))]
     .sort((a,b)=>a.d.localeCompare(b.d));
-  let showPast=false;
+  let showPast=false, filt="all";
+  const inFilt = e => filt==="all" || (filt==="sport"&&e.k==="sport") || (filt==="career"&&e.k==="career") || (filt==="school"&&!["sport","career"].includes(e.k));
+  document.querySelectorAll("#chips button").forEach(b=>b.onclick=()=>{filt=b.dataset.f; document.querySelectorAll("#chips button").forEach(x=>x.classList.toggle("on",x===b)); draw();});
   const draw = () => {
-    $("#events").innerHTML = all.filter(e=>showPast||e.d>=k).map(e=>{
+    $("#events").innerHTML = all.filter(e=>(showPast||e.d>=k)&&inFilt(e)).map(e=>{
       const d=parse(e.d);
       return `<div class="ev ${e.d<k?'past':''}"><div class="d"><b>${d.getDate()}</b><small>${MON[d.getMonth()].toUpperCase()}</small></div><div class="t"><span class="dot" style="background:${COLORS[e.k]}"></span>${e.t}${e.sub?`<small>${e.sub}</small>`:""}</div></div>`;
     }).join("") || `<div class="ev"><div></div><div class="t">Nothing left on the calendar — see you next year.</div></div>`;
