@@ -1,0 +1,141 @@
+{
+  "_help": "Lunch menu by date. Each date is a list of items. Add the monthly menu PDF with a \"YYYY-MM\" key and a \"file\".",
+  "2026-10": {
+    "file": "files/lunch-2026-10.pdf"
+  },
+  "2026-10-01": [
+    "Taco Salad",
+    "Chicken Fajita (HS)",
+    "Pinto Beans",
+    "Shredded Lettuce, Tomato, Shredded Cheese",
+    "Pineapple Tidbits"
+  ],
+  "2026-10-02": [
+    "Cheeseburger",
+    "French Fries",
+    "Salad Sandwich Cup",
+    "Diced Peaches"
+  ],
+  "2026-10-05": [
+    "Mini Corn Dogs",
+    "Baked Beans",
+    "Cole Slaw",
+    "Banana"
+  ],
+  "2026-10-06": [
+    "Breaded Beef Patty/Gravy",
+    "Mashed Potatoes",
+    "Green Beans",
+    "Roll",
+    "Mixed Fruit"
+  ],
+  "2026-10-07": [
+    "Pepperoni Pizza",
+    "Salad/Ranch",
+    "Seasoned Corn",
+    "Mandarin Oranges"
+  ],
+  "2026-10-08": [
+    "Burrito, Beef & Beans w/ Chili & Cheese",
+    "Goldfish Crackers",
+    "Salad/Ranch",
+    "Steamed Carrots/Apple Slices"
+  ],
+  "2026-10-09": [
+    "Cheeseburger",
+    "French Fries",
+    "Salad Sandwich Cup",
+    "Diced Peaches"
+  ],
+  "2026-10-13": [
+    "Breaded Beef Patty/Gravy",
+    "Mashed Potatoes",
+    "Green Beans",
+    "Roll",
+    "Mixed Fruit"
+  ],
+  "2026-10-14": [
+    "Mozzarella Cheese Bites/Marinara Sauce",
+    "Salad/Ranch",
+    "Seasoned Corn",
+    "Mandarin Oranges"
+  ],
+  "2026-10-15": [
+    "Nachos w/ Beef",
+    "Tortilla Chips/Cheese Cup",
+    "Salad/Ranch",
+    "Pinto Beans",
+    "Pineapple Tidbits"
+  ],
+  "2026-10-16": [
+    "Cheeseburger",
+    "French Fries",
+    "Salad Sandwich Cup",
+    "Diced Peaches"
+  ],
+  "2026-10-19": [
+    "Vegetable Beef Soup",
+    "Crackers",
+    "Grilled Cheese Sandwich",
+    "Salad/Ranch",
+    "Bananas"
+  ],
+  "2026-10-20": [
+    "Breaded Beef Patty/Gravy",
+    "Mashed Potatoes",
+    "Green Beans",
+    "Roll",
+    "Mixed Fruit"
+  ],
+  "2026-10-21": [
+    "Chicken & Noodles",
+    "Roll",
+    "Steamed Broccoli",
+    "Steamed Carrots",
+    "Apple Slices"
+  ],
+  "2026-10-22": [
+    "Mini Corn Dogs",
+    "Baked Beans",
+    "Cole Slaw",
+    "Frozen Fruit Cup"
+  ],
+  "2026-10-23": [
+    "Cheeseburger",
+    "French Fries",
+    "Salad Sandwich Cup",
+    "Diced Peaches"
+  ],
+  "2026-10-26": [
+    "Fish Sticks",
+    "Cornbread",
+    "Macaroni & Cheese",
+    "Peas & Carrots",
+    "Diced Pears"
+  ],
+  "2026-10-27": [
+    "Breaded Beef Patty/Gravy",
+    "Mashed Potatoes",
+    "Green Beans",
+    "Roll",
+    "Mixed Fruit"
+  ],
+  "2026-10-28": [
+    "Pepperoni Pizza",
+    "Salad/Ranch",
+    "Seasoned Corn",
+    "Mandarin Oranges"
+  ],
+  "2026-10-29": [
+    "Chili w/ Beef & Beans",
+    "Cheese Stick/Goldfish Crackers",
+    "Celery & Carrot Sticks",
+    "Cinnamon Roll/Apple Slices"
+  ],
+  "2026-10-30": [
+    "Cheeseburger",
+    "French Fries",
+    "Salad Sandwich Cup",
+    "Diced Peaches"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "_help": "Anything that is different from the regular schedule, by date. Each date can have entries per grade (\"K\" to \"6\") or \"all\" for every grade. Each entry may include: note, file (a PDF/image you put in the files folder), periods (replaces that day's period times), noSchool (true).",
+  "2026-10-12": {
+    "all": {
+      "noSchool": true,
+      "note": "Teacher Work Day — no school for students"
+    }
+  }
+}
